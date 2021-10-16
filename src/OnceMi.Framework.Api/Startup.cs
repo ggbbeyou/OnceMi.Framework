@@ -1,13 +1,7 @@
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using OnceMi.AspNetCore.IdGenerator;
 using OnceMi.AspNetCore.MQ;
@@ -19,10 +13,9 @@ using OnceMi.Framework.Extension.DependencyInjection;
 using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.Extension.Helpers;
 using OnceMi.Framework.Util.Json;
-using OnceMi.Framework.Extension.Middlewares;
-using System;
 using System.Text;
 using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.HttpLogging;
 
 namespace OnceMi.Framework.Api
 {
@@ -224,14 +217,13 @@ namespace OnceMi.Framework.Api
 
             #region 请求日志
 
-            //在.net6中将会启用此api
-            //services.AddHttpLogging(logging =>
-            //{
-            //    // Customize HTTP logging here.
-            //    logging.LoggingFields = HttpLoggingFields.All;
-            //    logging.RequestBodyLogLimit = 4096;
-            //    logging.ResponseBodyLogLimit = 4096;
-            //});
+            services.AddHttpLogging(logging =>
+            {
+                // Customize HTTP logging here.
+                logging.LoggingFields = HttpLoggingFields.All;
+                logging.RequestBodyLogLimit = 4096;
+                logging.ResponseBodyLogLimit = 4096;
+            });
 
             #endregion
 
@@ -304,10 +296,8 @@ namespace OnceMi.Framework.Api
 
             #region 请求日志
 
-            //请求日志，将在.net6中启用此api
-            //app.UseHttpLogging();
             //请求日志
-            app.UseRequestLogging();
+            app.UseHttpLogging();
 
             #endregion
 
