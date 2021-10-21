@@ -217,13 +217,16 @@ namespace OnceMi.Framework.Api
 
             #region 请求日志
 
-            services.AddHttpLogging(logging =>
+            if (Configuration.GetValue<bool>("AppSettings:IsEnabledRequestLog"))
             {
-                // Customize HTTP logging here.
-                logging.LoggingFields = HttpLoggingFields.All;
-                logging.RequestBodyLogLimit = 4096;
-                logging.ResponseBodyLogLimit = 4096;
-            });
+                services.AddHttpLogging(logging =>
+                {
+                    // Customize HTTP logging here.
+                    logging.LoggingFields = HttpLoggingFields.All;
+                    logging.RequestBodyLogLimit = 4096;
+                    logging.ResponseBodyLogLimit = 4096;
+                });
+            }
 
             #endregion
 
@@ -277,8 +280,7 @@ namespace OnceMi.Framework.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app
             , IWebHostEnvironment env
-            , ILoggerFactory loggerFactory
-            , ConfigManager config)
+            , ILoggerFactory loggerFactory)
         {
             #region 全局异常处理
 
@@ -296,8 +298,11 @@ namespace OnceMi.Framework.Api
 
             #region 请求日志
 
-            //请求日志
-            app.UseHttpLogging();
+            if (Configuration.GetValue<bool>("AppSettings:IsEnabledRequestLog"))
+            {
+                //请求日志
+                app.UseHttpLogging();
+            }
 
             #endregion
 
@@ -320,7 +325,7 @@ namespace OnceMi.Framework.Api
 
             app.UseEndpoints(endpoints =>
             {
-                if (config.AppSettings.HealthCheck.IsEnabledHealthCheckUI)
+                if (Configuration.GetValue<bool>("AppSettings:HealthCheck:IsEnabledHealthCheckUI"))
                 {
                     //MapHealthChecksUI应该统一写到UseHealthChecks中
                     //但是有bug，具体请看UseHealthChecks中注释
@@ -330,7 +335,7 @@ namespace OnceMi.Framework.Api
                         options.UseRelativeResourcesPath = false;
                         options.UseRelativeApiPath = false;
                         options.UseRelativeWebhookPath = false;
-                        options.UIPath = config.AppSettings.HealthCheck.HealthCheckUIPath;
+                        options.UIPath = Configuration.GetValue<string>("AppSettings:HealthCheck:HealthCheckUIPath");
                     }).AllowAnonymous();
                 }
 

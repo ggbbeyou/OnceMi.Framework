@@ -12,7 +12,7 @@
 		<PackageReference Include="IdentityModel" Version="5.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0-rc.2.21480.5" />
-		<PackageReference Include="Portable.BouncyCastle" Version="1.8.10" />
+		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 		<PackageReference Include="FreeSql" Version="2.6.100" />
 		<PackageReference Include="FreeRedis" Version="0.3.7" />
 		<PackageReference Include="IdleBus" Version="1.5.2" />
